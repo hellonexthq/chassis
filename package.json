@@ -22,6 +22,7 @@
     "@commitlint/cli": "^17.4.4",
     "@commitlint/config-conventional": "^17.4.4",
     "@commitlint/prompt-cli": "^17.4.4",
+    "@stitches/react": "^1.2.8",
     "@typescript-eslint/eslint-plugin": "^5.53.0",
     "@typescript-eslint/parser": "^5.53.0",
     "eslint": "^8.34.0",
