@@ -1,20 +1,20 @@
 import { allAuthors, allBlogs, Author, Blog } from 'contentlayer/generated'
 import { GetStaticProps } from 'next'
 import { useMDXComponent } from 'next-contentlayer/hooks'
-import Balancer from 'react-wrap-balancer'
 
 import { MDXComponents } from '../components/mdx'
 
-export default function BlogPage({ post }: {
+export default function BlogPage({
+  post
+}: {
   post: Blog & { authorInfo: Author }
 }) {
   const Component = useMDXComponent(post.body.code)
 
-
   return (
     <section>
       <h1 className='font-bold text-3xl font-serif max-w-[650px]'>
-        <Balancer>{post.title}</Balancer>
+        {post.title}
       </h1>
       <div className='grid grid-cols-[auto_1fr_auto] items-center mt-4 mb-8 font-mono text-sm max-w-[650px]'>
         <div className='bg-neutral-100 dark:bg-neutral-800 rounded-md px-2 py-1 tracking-tighter'>
@@ -27,12 +27,10 @@ export default function BlogPage({ post }: {
   )
 }
 
-
-
 export async function getStaticPaths() {
   return {
     paths: allBlogs.map((p) => ({ params: { slug: p.slug } })),
-    fallback: false,
+    fallback: false
   }
 }
 
