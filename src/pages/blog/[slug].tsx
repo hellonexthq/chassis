@@ -2,7 +2,7 @@ import { allAuthors, allBlogs, Author, Blog } from 'contentlayer/generated'
 import { GetStaticProps } from 'next'
 import { useMDXComponent } from 'next-contentlayer/hooks'
 
-import { MDXComponents } from '../components/mdx'
+import { MDXComponents } from '../../components/mdx'
 
 export default function BlogPage({
   post
