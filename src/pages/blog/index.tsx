@@ -1,17 +1,11 @@
-import { allBlogs } from 'contentlayer/generated'
+import { allBlogs, Blog } from 'contentlayer/generated'
 import Link from 'next/link'
 
-export default async function BlogPage() {
+export default function BlogPage({ posts }: { posts: Blog[] }) {
   return (
     <section>
       <h1 className='font-bold text-3xl font-serif mb-5'>Blog</h1>
-      {allBlogs
-        .sort((a, b) => {
-          if (new Date(a.publishedAt) > new Date(b.publishedAt)) {
-            return -1
-          }
-          return 1
-        })
+      {posts
         .map((post) => (
           <Link
             key={post.slug}
@@ -25,4 +19,13 @@ export default async function BlogPage() {
         ))}
     </section>
   )
+}
+
+
+export function getStaticProps() {
+  const posts = allBlogs.sort(
+    (a, b) => Number(new Date(b.publishedAt)) - Number(new Date(a.publishedAt))
+  )
+
+  return { props: { posts } }
 }

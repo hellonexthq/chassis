@@ -1,20 +1,15 @@
-import { Mdx } from 'components/mdx'
-import { allBlogs } from 'contentlayer/generated'
-import { notFound } from 'next/navigation'
+import { allAuthors, allBlogs, Author, Blog } from 'contentlayer/generated'
+import { GetStaticProps } from 'next'
+import { useMDXComponent } from 'next-contentlayer/hooks'
 import Balancer from 'react-wrap-balancer'
 
-export async function generateStaticParams() {
-  return allBlogs.map((post) => ({
-    slug: post.slug
-  }))
-}
+import { MDXComponents } from '../components/mdx'
 
-export default async function Blog({ params }) {
-  const post = allBlogs.find((post) => post.slug === params.slug)
+export default function BlogPage({ post }: {
+  post: Blog & { authorInfo: Author }
+}) {
+  const Component = useMDXComponent(post.body.code)
 
-  if (!post) {
-    notFound()
-  }
 
   return (
     <section>
@@ -27,7 +22,24 @@ export default async function Blog({ params }) {
         </div>
         <div className='h-[0.2em] bg-neutral-50 dark:bg-neutral-800 mx-2' />
       </div>
-      <Mdx code={post.body.code} />
+      <Component components={MDXComponents} />
     </section>
   )
+}
+
+
+
+export async function getStaticPaths() {
+  return {
+    paths: allBlogs.map((p) => ({ params: { slug: p.slug } })),
+    fallback: false,
+  }
+}
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const post = allBlogs.find((post) => post.slug === params?.slug)
+  const author = allAuthors.find(
+    (author) => author._id === `authors/${post?.author || 'karthik'}.mdx`
+  )
+  return { props: { post: { ...post, authorInfo: author || {} } } }
 }
